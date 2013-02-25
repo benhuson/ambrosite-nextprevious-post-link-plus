@@ -76,7 +76,7 @@ function get_adjacent_post_plus($r, $previous = true ) {
 	
 //	Get the list of post types. Default to current post type
 	if ( empty($post_type) )
-		$post_type = "'$post->post_type'";
+		$post_type = $post->post_type;
 
 //	Put this section in a do-while loop to enable the loop-to-first-post option
 	do {
@@ -187,7 +187,7 @@ function get_adjacent_post_plus($r, $previous = true ) {
 
 //		In case the value in the $order_by column is not unique, select posts based on the $order_2nd column as well.
 //		This prevents posts from being skipped when they have, for example, the same menu_order.
-		$where = apply_filters( "get_{$adjacent}_post_plus_where", $wpdb->prepare("WHERE ( $order_by $op $order_format OR $order_2nd $op $order_format2 AND $order_by = $order_format ) AND p.post_type IN ($post_type) AND p.post_status = 'publish' $in_same_term_sql $in_same_author_sql $in_same_meta_sql $ex_cats_sql $in_cats_sql $ex_posts_sql $in_posts_sql", $current_post, $current_post2, $current_post), $r );
+		$where = apply_filters( "get_{$adjacent}_post_plus_where", $wpdb->prepare("WHERE ( $order_by $op $order_format OR $order_2nd $op $order_format2 AND $order_by = $order_format ) AND p.post_type IN (%s) AND p.post_status = 'publish' $in_same_term_sql $in_same_author_sql $in_same_meta_sql $ex_cats_sql $in_cats_sql $ex_posts_sql $in_posts_sql", $current_post, $current_post2, $current_post, $post_type), $r );
 
 		$sort  = apply_filters( "get_{$adjacent}_post_plus_sort", "ORDER BY $order_by $order, $order_2nd $order LIMIT $num_results", $r );
 
